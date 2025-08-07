@@ -1,0 +1,164 @@
+{% extends 'main/base.html' %}
+{% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container-fluid">
+    <h1 class="text-center text-primary"><strong>Manufacturing Dashboard</strong></h1>
+
+    <div class="row">
+        <div class="col-3 my-4">
+            <div class="card bg-info">
+                <div class="card-body text-white text-center">
+                    <h5>Transactions</h5>
+                    <p>{{ transactions }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-3 my-4">
+            <div class="card bg-warning">
+                <div class="card-body text-white text-center">
+                    <h5>Costs</h5>
+                    <p>{{ cost }} RWF</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-3 my-4">
+            <div class="card bg-primary">
+                <div class="card-body text-white text-center">
+                    <h5>Revenues</h5>
+                    <p>{{ revenue }} RWF</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-3 my-4">
+            <div class="card bg-secondary">
+                <div class="card-body text-white text-center">
+                    <h5>Profits</h5>
+                    <p>{{ profits }} RWF</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+    <!-- Charts Row -->
+    <div class="row">
+        <!-- Chart 1: Revenue by Location -->
+        <div class="col-6">
+            <h5 class="text-center text-primary"> <strong>Revenues by Location</strong></h5>
+            <canvas id="userChart" style="max-height: 100%;"></canvas>
+            {{ locations|json_script:"locations-data" }}
+            {{ revenues|json_script:"revenues-data" }}
+        </div>
+    <br>
+        <!-- Chart 2: Payments by Method -->
+        <div class="col-6">
+            <h5 class="text-center text-primary"><strong>Transaction by Payment Method</strong></h5>
+            <canvas id="paymentChart" style="max-height: 90%;"></canvas>
+            {{ payment_method|json_script:"payment-labels" }}
+            {{ payment_amount|json_script:"payment-data" }}
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="row col-6 px-2">
+        <h3 class="text-center text-primary"><strong>Transaction Overtime</strong></h3>
+        <canvas id="dailytransaction"></canvas>
+        {{ transaction_date|json_script:"date-labels" }}
+        {{ transaction_number_day|json_script:"nbr-transaction-data" }}
+
+    </div>
+
+    <!-- Chart Scripts -->
+    <script>
+        // Chart 1
+        const locations = JSON.parse(document.getElementById('locations-data').textContent);
+        const revenues = JSON.parse(document.getElementById('revenues-data').textContent);
+
+        new Chart(document.getElementById('userChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: locations,
+                datasets: [{
+                    label: 'Revenue (RWF)',
+                    data: revenues,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        // Chart 2: Payment Method
+        const paymentLabels = JSON.parse(document.getElementById('payment-labels').textContent);
+        const paymentData = JSON.parse(document.getElementById('payment-data').textContent);
+
+        new Chart(document.getElementById('paymentChart').getContext('2d'), {
+            type: 'pie',
+            data: {
+                labels: paymentLabels,
+                datasets: [{
+                    label: 'Payments',
+                    data: paymentData,
+                    backgroundColor: [
+                        'rgb(255, 0, 0)',
+                        'rgb(0, 255, 0)',
+                        'rgb(0, 0, 255)'
+                    ],
+                    hoverOffset: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                cutout: '50%'
+            }
+        });
+
+        //chart 3: Line chart of number of transaction per day
+        const dateLabels = JSON.parse(document.getElementById('date-labels').textContent);
+const transactiondata = JSON.parse(document.getElementById('nbr-transaction-data').textContent);
+
+new Chart(document.getElementById('dailytransaction').getContext('2d'), {
+    type: 'line',
+    data: {
+        labels: dateLabels,
+        datasets: [{
+            label: 'Date',
+            data: transactiondata,
+            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 2,
+            fill: false
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            x: {
+                grid: {
+                    display: false  // removes vertical grid lines
+                }
+            },
+            y: {
+                grid: {
+                    display: false  // removes horizontal grid lines
+                }
+            }
+        }
+    }
+});
+
+
+    </script>
+</div>
+
+{% endblock %}
