@@ -7,7 +7,7 @@
     <h1 class="text-center text-primary"><strong>Manufacturing Dashboard</strong></h1>
 
     <div class="row">
-        <div class="col-3 my-4">
+        <div class="col-12 col-sm-6 col-md-3 my-4">
             <div class="card bg-info">
                 <div class="card-body text-white text-center">
                     <h5>Transactions</h5>
@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        <div class="col-3 my-4">
+        <div class="col-12 col-sm-6 col-md-3 my-4">
             <div class="card bg-warning">
                 <div class="card-body text-white text-center">
                     <h5>Costs</h5>
@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <div class="col-3 my-4">
+        <div class="col-12 col-sm-6 col-md-3 my-4">
             <div class="card bg-primary">
                 <div class="card-body text-white text-center">
                     <h5>Revenues</h5>
@@ -34,7 +34,7 @@
             </div>
         </div>
 
-        <div class="col-3 my-4">
+        <div class="col-12 col-sm-6 col-md-3 my-4">
             <div class="card bg-secondary">
                 <div class="card-body text-white text-center">
                     <h5>Profits</h5>
@@ -49,7 +49,7 @@
     <!-- Charts Row -->
     <div class="row">
         <!-- Chart 1: Revenue by Location -->
-        <div class="col-6">
+        <div class="col-12 col-md-6 mb-4">
             <h5 class="text-center text-primary"> <strong>Revenues by Location</strong></h5>
             <canvas id="userChart" style="max-height: 100%;"></canvas>
             {{ locations|json_script:"locations-data" }}
@@ -57,7 +57,7 @@
         </div>
     <br>
         <!-- Chart 2: Payments by Method -->
-        <div class="col-6">
+        <div class="col-12 col-md-6 mb-4">
             <h5 class="text-center text-primary"><strong>Transaction by Payment Method</strong></h5>
             <canvas id="paymentChart" style="max-height: 90%;"></canvas>
             {{ payment_method|json_script:"payment-labels" }}
@@ -66,9 +66,9 @@
     </div>
     <br>
     <br>
-    <div class="row px-2">
+    <div class="col-12 mb-4">
         <h3 class="text-center text-primary"><strong>Transaction Overtime</strong></h3>
-        <canvas id="dailytransaction"></canvas>
+        <canvas id="dailytransaction" style ="width: 100%; height:400px;"></canvas>
         {{ transaction_date|json_script:"date-labels" }}
         {{ transaction_number_day|json_script:"nbr-transaction-data" }}
 
